@@ -1,21 +1,28 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button, TouchableHighlight, ImageBackground, Alert} from 'react-native';
+import { StyleSheet, Text, View, Button, TouchableHighlight, ImageBackground, Alert, ActivityIndicator} from 'react-native';
 import GeoNames from "../api/geonames";
 
 function CountriesResultScreen({route, navigation}){
+  const [loading, setLoading] = React.useState(false);
 
-  const searchCity=(text)=>{
-    GeoNames.searchCity(text)
+  const searchCity=(city)=>{
+    setLoading(true);
+    GeoNames.searchCity(city)
     .then(dt => navigation.navigate("Result",dt))
     .catch(er => Alert.alert(`Oops... Something went wrong. Error: ${er}`))
+    .finally(()=>setLoading(false))
   };
 
-  return(
 
+  return(
     <ImageBackground
       style={styles.container}
       //source={require("../../assets/background.jpg")}
     >
+      {loading?
+      <View style={styles.loading}>
+        <ActivityIndicator color="#009688" size="large"/>
+      </View>:null}
       <Text style={styles.logo}>Result</Text>
       {route.params.geonames.map(function(city){ //displays all the results
         return (
@@ -65,6 +72,10 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     alignSelf: "center",
     textTransform: "uppercase"
+  },
+  loading: {
+    position: "absolute",
+    top: "10%",
   }
 });
 

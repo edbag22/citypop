@@ -1,12 +1,14 @@
 import React from 'react';
-import { TextInput, StyleSheet, Text, View, Button, TouchableHighlight, ImageBackground, TouchableWithoutFeedback, Keyboard, Alert} from 'react-native';
+import { TextInput, StyleSheet, Text, View, Button, TouchableHighlight, ImageBackground, TouchableWithoutFeedback, Keyboard, Alert, ActivityIndicator} from 'react-native';
 import GeoNames from "../api/geonames";
 
 function SearchScreen({route, navigation}){
   const [text, onChangeText] = React.useState(null);
+  const [loading, setLoading] = React.useState(false);
   const type = route.params.type;
 
   const searchCity=()=>{
+    setLoading(true);
     GeoNames.searchCity(text)
     .then(dt => {
       if(dt.geonames.length){
@@ -15,9 +17,11 @@ function SearchScreen({route, navigation}){
       else{Alert.alert("No city found")}
     })
     .catch(er => Alert.alert(`Oops... Something went wrong. Error: ${er}`))
+    .finally(()=>setLoading(false))
   };
 
   const searchCountry=()=>{
+    setLoading(true);
     GeoNames.searchCountry(text)
     .then(dt => {
       if(dt.geonames.length){
@@ -27,6 +31,7 @@ function SearchScreen({route, navigation}){
       }
       else{Alert.alert("No country found")}
     })
+    .finally(()=>setLoading(false))
   };
 
   return(
@@ -42,12 +47,16 @@ function SearchScreen({route, navigation}){
           value={text}
           placeholder= {`Enter a ${type?"city":"country"}`}
         />
+        {loading?
+        <View style={styles.loading}>
+          <ActivityIndicator color="#009688" size="large"/>
+        </View>
+        :null}
         <TouchableHighlight
           style={styles.appButtonContainer}
           onPress={()=>type?searchCity():searchCountry()}>
           <Text style={styles.appButtonText}>Search</Text>
         </TouchableHighlight>
-
       </ImageBackground>
     </TouchableWithoutFeedback>
   );
@@ -91,6 +100,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     borderWidth: 3,
   },
+  loading: {
+    position: "absolute",
+    top: "10%",
+  }
 });
 
 export default SearchScreen;
