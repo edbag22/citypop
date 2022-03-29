@@ -1,5 +1,5 @@
 import React from 'react';
-import { TextInput, StyleSheet, Text, View, Button, TouchableHighlight, ImageBackground, TouchableWithoutFeedback, Keyboard} from 'react-native';
+import { TextInput, StyleSheet, Text, View, Button, TouchableHighlight, ImageBackground, TouchableWithoutFeedback, Keyboard, Alert} from 'react-native';
 import GeoNames from "../api/geonames";
 
 function SearchScreen({route, navigation}){
@@ -8,14 +8,25 @@ function SearchScreen({route, navigation}){
 
   const searchCity=()=>{
     GeoNames.searchCity(text)
-    .then(dt => navigation.navigate("Result",dt))
-    .catch(er => console.log(er))
+    .then(dt => {
+      if(dt.geonames.length){
+      navigation.navigate("Result",dt)
+      }
+      else{Alert.alert("No city found")}
+    })
+    .catch(er => Alert.alert(`Oops... Something went wrong. Error: ${er}`))
   };
 
   const searchCountry=()=>{
     GeoNames.searchCountry(text)
-    .then(dt => navigation.navigate("CountriesResult",dt))
-    .catch(er => console.log(er))
+    .then(dt => {
+      if(dt.geonames.length){
+      GeoNames.searchCities(dt.geonames[0].countryCode)
+      .then(dt => navigation.navigate("CountriesResult",dt))
+      .catch(er => Alert.alert(`Oops... Something went wrong. Error: ${er}`))
+      }
+      else{Alert.alert("No country found")}
+    })
   };
 
   return(

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button, TouchableHighlight, ImageBackground} from 'react-native';
+import { StyleSheet, Text, View, Button, TouchableHighlight, ImageBackground, Alert} from 'react-native';
 import GeoNames from "../api/geonames";
 
 function CountriesResultScreen({route, navigation}){
@@ -7,7 +7,7 @@ function CountriesResultScreen({route, navigation}){
   const searchCity=(text)=>{
     GeoNames.searchCity(text)
     .then(dt => navigation.navigate("Result",dt))
-    .catch(er => console.log(er))
+    .catch(er => Alert.alert(`Oops... Something went wrong. Error: ${er}`))
   };
 
   return(
@@ -17,16 +17,13 @@ function CountriesResultScreen({route, navigation}){
       //source={require("../../assets/background.jpg")}
     >
       <Text style={styles.logo}>Result</Text>
-      <TouchableHighlight style={styles.appButtonContainer} onPress={()=>searchCity(route.params.geonames[0].name)}>
-        <Text style={styles.text}>{route.params.geonames[0].name}</Text>
-      </TouchableHighlight>
-      <TouchableHighlight style={styles.appButtonContainer} onPress={()=>searchCity(route.params.geonames[1].name)}>
-        <Text style={styles.text}>{route.params.geonames[1].name}</Text>
-      </TouchableHighlight>
-      <TouchableHighlight style={styles.appButtonContainer} onPress={()=>searchCity(route.params.geonames[2].name)}>
-        <Text style={styles.text}>{route.params.geonames[2].name}</Text>
-      </TouchableHighlight>
-
+      {route.params.geonames.map(function(city){ //displays all the results
+        return (
+          <TouchableHighlight key={city.geonameId} style={styles.appButtonContainer} onPress={()=>searchCity(city.name)}>
+            <Text style={styles.text}>{city.name}</Text>
+          </TouchableHighlight>
+        )
+      })}
     </ImageBackground>
   );
 }

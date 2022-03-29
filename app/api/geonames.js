@@ -1,6 +1,6 @@
 const GeoNames={
-  searchCity(text){
-    return fetch(`http://api.geonames.org/search?maxRows=1&type=json&featureClass=p&username=weknowit&q=`+ text) // country code in ISO3166
+  searchCity(city){ // name of city
+    return fetch(`http://api.geonames.org/search?maxRows=1&type=json&featureClass=p&username=weknowit&q=`+ city)
           .then(response => {
             if(response.status !== 200) {
               throw response.status
@@ -9,24 +9,27 @@ const GeoNames={
           })
           .then(response => response.json());
     },
-    searchCountry(text){
-      return fetch(`http://api.geonames.org/search?maxRows=1&type=json&featureClass=a&username=weknowit&q=`+ text) // country code in ISO3166
+    searchCountry(country){ // name of country
+      return fetch(`http://api.geonames.org/search?maxRows=1&type=json&featureClass=a&username=weknowit&q=`+ country)
             .then(response => {
               if(response.status !== 200) {
                 throw response.status
               }
               return response
             })
-            .then(response => response.json())
-            .then(response => fetch(`http://api.geonames.org/search?maxRows=3&type=json&featureClass=p&username=weknowit&q=&country=`+ response.geonames[0].countryCode) // country code in ISO3166
-                              .then(response => {
-                                if(response.status !== 200) {
-                                  throw response.status
-                                }
-                                return response
-                              })
-                              .then(response => response.json()));
-      }
+            .then(response => response.json());
+          },
+    searchCities(countryCode){ // country code in ISO3166
+      console.log(countryCode);
+      return fetch(`http://api.geonames.org/search?maxRows=3&type=json&featureClass=p&username=weknowit&q=&country=`+ countryCode)
+            .then(response => {
+              if(response.status !== 200) {
+                throw response.status
+              }
+              return response
+            })
+            .then(response => response.json());
+    }
 }
 
 export default GeoNames;
