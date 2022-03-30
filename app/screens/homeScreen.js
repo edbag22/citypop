@@ -1,26 +1,26 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button, TouchableHighlight, ImageBackground} from 'react-native';
+import { StyleSheet, Text, View, Button, TouchableHighlight, TouchableOpacity, ImageBackground, Image} from 'react-native';
 
 function HomeScreen({navigation}){
   return(
 
-    <ImageBackground
-      style={styles.container}
-      //source={require("../../assets/background.jpg")}
-    >
-      <Text style={styles.logo}>CityPop</Text>
-      <TouchableHighlight
+    <View style={styles.container}>
+
+      <Image style={styles.image} source={require("../../assets/logo.png")}/>
+
+      <TouchableOpacity
         style={styles.appButtonContainer}
         onPress={()=>navigation.navigate("Search", {type:1})}>
         <Text style={styles.appButtonText}>Search by City</Text>
-      </TouchableHighlight>
+      </TouchableOpacity>
 
-      <TouchableHighlight
+      <TouchableOpacity
         style={styles.appButtonContainer}
         onPress={()=>navigation.navigate("Search", {type:0})}>
         <Text style={styles.appButtonText}>Search by Country</Text>
-      </TouchableHighlight>
-    </ImageBackground>
+      </TouchableOpacity>
+
+    </View>
   );
 }
 
@@ -34,15 +34,15 @@ const styles = StyleSheet.create({
     width: "80%",
     elevation: 8,
     backgroundColor: "#009688",
-    borderRadius: 10,
-    paddingVertical: 10,
-    paddingHorizontal: 12,
+    borderRadius: 15,
+    paddingVertical: 20,
     marginTop:10,
+    shadowOffset: { height: 1, width: 1 },
+    shadowOpacity: 1,
   },
   appButtonText: {
     fontSize: 18,
     color: "#fff",
-    fontWeight: "bold",
     alignSelf: "center",
     textTransform: "uppercase"
   },
@@ -54,6 +54,13 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     alignSelf: "center",
     textTransform: "uppercase"
+  },
+  image:{
+    position: "absolute",
+    bottom: "0%",
+    alignSelf: "center",
+    width: "80%",
+    resizeMode: 'contain'
   }
 });
 

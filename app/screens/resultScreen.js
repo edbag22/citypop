@@ -2,20 +2,19 @@ import React from 'react';
 import { StyleSheet, Text, View, Button, TouchableHighlight, ImageBackground} from 'react-native';
 
 function ResultScreen({route, navigation}){
-  const city = route.params.geonames[0].name;
-  const population = route.params.geonames[0].population;
 
   return(
 
-    <ImageBackground
-      style={styles.container}
-      //source={require("../../assets/background.jpg")}
-    >
-      <Text style={styles.logo}>Result</Text>
-      <Text style={styles.text}>{city}</Text>
-      <Text style={styles.text}>{population}</Text>
+    <View style={styles.container}>
 
-    </ImageBackground>
+      <Text style={styles.logo}>{route.params.geonames[0].name}</Text>
+
+      <View style={styles.border}>
+        <Text style={styles.text}>Population:</Text>
+        <Text style={styles.populationText}>{route.params.geonames[0].population}</Text>
+      </View>
+
+    </View>
   );
 }
 
@@ -26,11 +25,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   text: {
-    fontSize: 30,
+    fontSize: 20,
     color: "black",
-    fontWeight: "bold",
     alignSelf: "center",
-    textTransform: "uppercase"
+  },
+  populationText: {
+    fontSize: 40,
+    color: "black",
+    alignSelf: "center",
   },
   appButtonContainer: {
     width: "80%",
@@ -56,7 +58,14 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     alignSelf: "center",
     textTransform: "uppercase"
-  }
+  },
+  border: {
+    width: "80%",
+    borderWidth: 3,
+    borderColor: "#009688",
+    borderRadius: 15,
+    paddingVertical: 20,
+  },
 });
 
 export default ResultScreen;

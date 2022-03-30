@@ -1,10 +1,11 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button, TouchableHighlight, ImageBackground, Alert, ActivityIndicator} from 'react-native';
+import { StyleSheet, Text, View, Button, TouchableOpacity, ImageBackground, Alert, ActivityIndicator} from 'react-native';
 import GeoNames from "../api/geonames";
 
 function CountriesResultScreen({route, navigation}){
-  const [loading, setLoading] = React.useState(false);
 
+  const [loading, setLoading] = React.useState(false);
+  
   const searchCity=(city)=>{
     setLoading(true);
     GeoNames.searchCity(city)
@@ -15,23 +16,25 @@ function CountriesResultScreen({route, navigation}){
 
 
   return(
-    <ImageBackground
-      style={styles.container}
-      //source={require("../../assets/background.jpg")}
-    >
+    <View style={styles.container}>
+
       {loading?
       <View style={styles.loading}>
         <ActivityIndicator color="#009688" size="large"/>
       </View>:null}
-      <Text style={styles.logo}>Result</Text>
-      {route.params.geonames.map(function(city){ //displays all the results
+
+      <Text style={styles.logo}>
+        {route.params.geonames[0].countryName}
+      </Text>
+
+      {route.params.geonames.map(function(city){
         return (
-          <TouchableHighlight key={city.geonameId} style={styles.appButtonContainer} onPress={()=>searchCity(city.name)}>
-            <Text style={styles.text}>{city.name}</Text>
-          </TouchableHighlight>
+          <TouchableOpacity key={city.geonameId} style={styles.appButtonContainer} onPress={()=>searchCity(city.name)}>
+            <Text style={styles.appButtonText}>{city.name}</Text>
+          </TouchableOpacity>
         )
       })}
-    </ImageBackground>
+    </View>
   );
 }
 
@@ -52,17 +55,16 @@ const styles = StyleSheet.create({
     width: "80%",
     elevation: 8,
     backgroundColor: "#009688",
-    borderRadius: 10,
-    paddingVertical: 10,
-    paddingHorizontal: 12,
+    borderRadius: 15,
+    paddingVertical: 20,
     marginTop:10,
+    shadowOffset: { height: 1, width: 1 },
+    shadowOpacity: 1,
   },
   appButtonText: {
     fontSize: 18,
     color: "#fff",
-    fontWeight: "bold",
     alignSelf: "center",
-    textTransform: "uppercase"
   },
   logo: {
     position: "absolute",

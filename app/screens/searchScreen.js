@@ -1,5 +1,5 @@
 import React from 'react';
-import { TextInput, StyleSheet, Text, View, Button, TouchableHighlight, ImageBackground, TouchableWithoutFeedback, Keyboard, Alert, ActivityIndicator} from 'react-native';
+import { TextInput, Image, StyleSheet, Text, View, Button, TouchableOpacity, ImageBackground, TouchableWithoutFeedback, Keyboard, Alert, ActivityIndicator} from 'react-native';
 import GeoNames from "../api/geonames";
 
 function SearchScreen({route, navigation}){
@@ -26,7 +26,7 @@ function SearchScreen({route, navigation}){
     .then(dt => {
       if(dt.geonames.length){
       GeoNames.searchCities(dt.geonames[0].countryCode)
-      .then(dt => navigation.navigate("CountriesResult",dt))
+      .then(dt => navigation.navigate("Country",dt))
       .catch(er => Alert.alert(`Oops... Something went wrong. Error: ${er}`))
       }
       else{Alert.alert("No country found")}
@@ -36,10 +36,7 @@ function SearchScreen({route, navigation}){
 
   return(
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      <ImageBackground
-        style={styles.container}
-        //source={require("../../assets/background.jpg")}
-      >
+      <View style={styles.container}>
         <Text style={styles.logo}>Search by {type?"city":"country"}</Text>
         <TextInput
           style={styles.input}
@@ -52,12 +49,11 @@ function SearchScreen({route, navigation}){
           <ActivityIndicator color="#009688" size="large"/>
         </View>
         :null}
-        <TouchableHighlight
-          style={styles.appButtonContainer}
+        <TouchableOpacity
           onPress={()=>type?searchCity():searchCountry()}>
-          <Text style={styles.appButtonText}>Search</Text>
-        </TouchableHighlight>
-      </ImageBackground>
+          <Image style={styles.image} source={require("../../assets/search.png")}/>
+        </TouchableOpacity>
+      </View>
     </TouchableWithoutFeedback>
   );
 }
@@ -98,11 +94,18 @@ const styles = StyleSheet.create({
     height: 40,
     backgroundColor: "white",
     textAlign: 'center',
-    borderWidth: 3,
+    borderWidth: 1,
+    borderRadius: 15,
   },
   loading: {
     position: "absolute",
     top: "10%",
+  },
+  image:{
+    marginTop:20,
+    width: 100,
+    height: 100,
+    resizeMode: 'contain'
   }
 });
 
