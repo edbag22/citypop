@@ -1,16 +1,19 @@
 import React from 'react';
-import { TextInput, Image, StyleSheet, Text, View, Button, TouchableOpacity, ImageBackground, TouchableWithoutFeedback, Keyboard, Alert, ActivityIndicator} from 'react-native';
+import { TextInput, Image, StyleSheet, Text, View, TouchableOpacity, TouchableWithoutFeedback, Keyboard, Alert, ActivityIndicator} from 'react-native';
 import GeoNames from "../api/geonames";
 
-function SearchScreen({route, navigation}){
+function SearchScreen( {route, navigation} ) {
+
   const [text, onChangeText] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
-  const type = route.params.type;
 
-  const searchCity=()=>{
+  const type = route.params.type; // The type of the search. 1 for city, 0 for country.
+
+  const searchCity=()=>{ //Function to search for the given city. Sets Loading to true while searching
     setLoading(true);
     GeoNames.searchCity(text)
     .then(dt => {
+      console.log(dt);
       if(dt.geonames.length){
       navigation.navigate("Result",dt)
       }
@@ -20,7 +23,7 @@ function SearchScreen({route, navigation}){
     .finally(()=>setLoading(false))
   };
 
-  const searchCountry=()=>{
+  const searchCountry=()=>{ //Function to search for the given country, which will then search for the cities in the country. Sets Loading to true while searching
     setLoading(true);
     GeoNames.searchCountry(text)
     .then(dt => {
@@ -35,25 +38,33 @@ function SearchScreen({route, navigation}){
   };
 
   return(
+
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+
       <View style={styles.container}>
-        <Text style={styles.logo}>Search by {type?"city":"country"}</Text>
+
+        <Text style={styles.heading}>Search by {type?"city":"country"}</Text>
+
         <TextInput
           style={styles.input}
           onChangeText={onChangeText}
           value={text}
-          placeholder= {`Enter a ${type?"city":"country"}`}
-        />
+          placeholder= {`Enter a ${type?"city":"country"}`}/>
+
         {loading?
         <View style={styles.loading}>
           <ActivityIndicator color="#009688" size="large"/>
         </View>
         :null}
+
         <TouchableOpacity
-          onPress={()=>type?searchCity():searchCountry()}>
-          <Image style={styles.image} source={require("../../assets/search.png")}/>
+          onPress={()=>type?searchCity():searchCountry()}
+          disabled={text?false:true}>
+          <Image style={text?styles.search:styles.disabledSearch} source={require("../../assets/search.png")}/>
         </TouchableOpacity>
+
       </View>
+
     </TouchableWithoutFeedback>
   );
 }
@@ -64,25 +75,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  appButtonContainer: {
-    width: "80%",
-    elevation: 8,
-    backgroundColor: "#009688",
-    borderRadius: 10,
-    paddingVertical: 10,
-    paddingHorizontal: 12,
-    marginTop:10,
-  },
-  appButtonText: {
-    fontSize: 18,
-    color: "#fff",
-    fontWeight: "bold",
-    alignSelf: "center",
-    textTransform: "uppercase"
-  },
-  logo: {
+  heading: {
     position: "absolute",
-    top: "25%",
+    top: "20%",
     fontSize: 30,
     color: "black",
     fontWeight: "bold",
@@ -101,7 +96,14 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: "10%",
   },
-  image:{
+  disabledSearch:{
+    tintColor: "#808080",
+    marginTop:20,
+    width: 100,
+    height: 100,
+    resizeMode: 'contain'
+  },
+  search:{
     marginTop:20,
     width: 100,
     height: 100,

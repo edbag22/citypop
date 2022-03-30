@@ -1,7 +1,8 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button, TouchableHighlight, TouchableOpacity, ImageBackground, Image} from 'react-native';
+import { Dimensions, StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
 
-function HomeScreen({navigation}){
+function HomeScreen( {navigation} ) {
+
   return(
 
     <View style={styles.container}>
@@ -23,6 +24,11 @@ function HomeScreen({navigation}){
     </View>
   );
 }
+
+//Ratio to get the height of the logo. Logo dimensions 1675x321
+const win = Dimensions.get('window');
+const ratio = 0.8 * win.width/1675;
+const height = ratio * 321;
 
 const styles = StyleSheet.create({
   container: {
@@ -46,20 +52,12 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     textTransform: "uppercase"
   },
-  logo: {
-    position: "absolute",
-    top: "25%",
-    fontSize: 30,
-    color: "black",
-    fontWeight: "bold",
-    alignSelf: "center",
-    textTransform: "uppercase"
-  },
   image:{
     position: "absolute",
-    bottom: "0%",
+    top: "20%",
     alignSelf: "center",
     width: "80%",
+    height: height,
     resizeMode: 'contain'
   }
 });

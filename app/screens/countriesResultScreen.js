@@ -1,12 +1,12 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button, TouchableOpacity, ImageBackground, Alert, ActivityIndicator} from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Alert, ActivityIndicator} from 'react-native';
 import GeoNames from "../api/geonames";
 
-function CountriesResultScreen({route, navigation}){
+function CountriesResultScreen( {route, navigation} ) {
 
   const [loading, setLoading] = React.useState(false);
-  
-  const searchCity=(city)=>{
+
+  const searchCity=(city)=>{ //Function to search for the given city. Sets Loading to true while searching
     setLoading(true);
     GeoNames.searchCity(city)
     .then(dt => navigation.navigate("Result",dt))
@@ -14,26 +14,24 @@ function CountriesResultScreen({route, navigation}){
     .finally(()=>setLoading(false))
   };
 
-
   return(
+
     <View style={styles.container}>
 
       {loading?
       <View style={styles.loading}>
         <ActivityIndicator color="#009688" size="large"/>
-      </View>:null}
+      </View>
+      :null}
 
-      <Text style={styles.logo}>
-        {route.params.geonames[0].countryName}
-      </Text>
+      <Text style={styles.heading}>{route.params.geonames[0].countryName}</Text>
 
-      {route.params.geonames.map(function(city){
-        return (
-          <TouchableOpacity key={city.geonameId} style={styles.appButtonContainer} onPress={()=>searchCity(city.name)}>
-            <Text style={styles.appButtonText}>{city.name}</Text>
-          </TouchableOpacity>
-        )
-      })}
+      {route.params.geonames.map(function(city){return(
+        <TouchableOpacity key={city.geonameId} style={styles.appButtonContainer} onPress={()=>searchCity(city.name)}>
+          <Text style={styles.appButtonText}>{city.name}</Text>
+        </TouchableOpacity>
+      )})}
+
     </View>
   );
 }
@@ -66,9 +64,9 @@ const styles = StyleSheet.create({
     color: "#fff",
     alignSelf: "center",
   },
-  logo: {
+  heading: {
     position: "absolute",
-    top: "25%",
+    top: "20%",
     fontSize: 30,
     color: "black",
     fontWeight: "bold",
