@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dimensions, StyleSheet, Text, View, Image} from 'react-native';
+import { Dimensions, StyleSheet, View, Image} from 'react-native';
 import { Button } from 'react-native-elements';
 
 function HomeScreen( {navigation} ) {

@@ -1,7 +1,7 @@
 import React from 'react';
-import { TextInput, Image, StyleSheet, Text, View, TouchableOpacity, TouchableWithoutFeedback, Keyboard, Alert, ActivityIndicator} from 'react-native';
-import GeoNames from "../api/geonames";
+import { TextInput, StyleSheet, Text, View, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native';
 import { Icon, Button } from 'react-native-elements';
+import GeoNames from "../api/geonames";
 
 function SearchScreen( {route, navigation} ) {
 
@@ -14,7 +14,6 @@ function SearchScreen( {route, navigation} ) {
     setLoading(true);
     GeoNames.searchCity(text)
     .then(dt => {
-      console.log(dt);
       if(dt.geonames.length){
       navigation.navigate("Result",dt)
       }

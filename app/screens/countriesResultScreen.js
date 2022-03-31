@@ -1,7 +1,7 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Alert, ActivityIndicator} from 'react-native';
-import GeoNames from "../api/geonames";
+import { StyleSheet, Text, View, Alert } from 'react-native';
 import { Icon, Button } from 'react-native-elements';
+import GeoNames from "../api/geonames";
 
 function CountriesResultScreen( {route, navigation} ) {
 
