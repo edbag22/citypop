@@ -1,13 +1,16 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Alert, ActivityIndicator} from 'react-native';
 import GeoNames from "../api/geonames";
+import { Icon, Button } from 'react-native-elements';
 
 function CountriesResultScreen( {route, navigation} ) {
 
   const [loading, setLoading] = React.useState(false);
+  const [currentCity, setCurrentCity] = React.useState(null);
 
   const searchCity=(city)=>{ //Function to search for the given city. Sets Loading to true while searching
     setLoading(true);
+    setCurrentCity(city);
     GeoNames.searchCity(city)
     .then(dt => navigation.navigate("Result",dt))
     .catch(er => Alert.alert(`Oops... Something went wrong. Error: ${er}`))
@@ -18,18 +21,19 @@ function CountriesResultScreen( {route, navigation} ) {
 
     <View style={styles.container}>
 
-      {loading?
-      <View style={styles.loading}>
-        <ActivityIndicator color="#009688" size="large"/>
-      </View>
-      :null}
-
       <Text style={styles.heading}>{route.params.geonames[0].countryName}</Text>
 
       {route.params.geonames.map(function(city){return(
-        <TouchableOpacity key={city.geonameId} style={styles.appButtonContainer} onPress={()=>searchCity(city.name)}>
-          <Text style={styles.appButtonText}>{city.name}</Text>
-        </TouchableOpacity>
+        <Button
+          loading={loading&&currentCity==city.name}
+          loadingProps={{size:"large"}}
+          key={city.geonameId}
+          buttonStyle={styles.appButton}
+          containerStyle={styles.appButtonContainer}
+          onPress={()=>searchCity(city.name)}
+          title={city.name}
+          titleStyle={styles.appButtonText}
+        />
       )})}
 
     </View>
@@ -42,22 +46,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  text: {
-    fontSize: 30,
-    color: "black",
-    fontWeight: "bold",
-    alignSelf: "center",
-    textTransform: "uppercase"
-  },
-  appButtonContainer: {
-    width: "80%",
-    elevation: 8,
-    backgroundColor: "#009688",
+  appButton: {
+    backgroundColor: "#638BBF",
     borderRadius: 15,
-    paddingVertical: 20,
+    height: 75,
+  },
+  appButtonContainer:{
+    width:"80%",
     marginTop:10,
-    shadowOffset: { height: 1, width: 1 },
-    shadowOpacity: 1,
   },
   appButtonText: {
     fontSize: 18,
@@ -73,10 +69,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     textTransform: "uppercase"
   },
-  loading: {
-    position: "absolute",
-    top: "10%",
-  }
 });
 
 export default CountriesResultScreen;

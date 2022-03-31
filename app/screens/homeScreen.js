@@ -1,5 +1,6 @@
 import React from 'react';
-import { Dimensions, StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
+import { Dimensions, StyleSheet, Text, View, Image} from 'react-native';
+import { Button } from 'react-native-elements';
 
 function HomeScreen( {navigation} ) {
 
@@ -9,17 +10,21 @@ function HomeScreen( {navigation} ) {
 
       <Image style={styles.image} source={require("../../assets/logo.png")}/>
 
-      <TouchableOpacity
-        style={styles.appButtonContainer}
-        onPress={()=>navigation.navigate("Search", {type:1})}>
-        <Text style={styles.appButtonText}>Search by City</Text>
-      </TouchableOpacity>
+      <Button
+        buttonStyle={styles.appButton}
+        containerStyle={styles.appButtonContainer}
+        onPress={()=>navigation.navigate("Search", {type:1})}
+        title="Search by City"
+        titleStyle={styles.appButtonText}
+      />
 
-      <TouchableOpacity
-        style={styles.appButtonContainer}
-        onPress={()=>navigation.navigate("Search", {type:0})}>
-        <Text style={styles.appButtonText}>Search by Country</Text>
-      </TouchableOpacity>
+      <Button
+        buttonStyle={styles.appButton}
+        containerStyle={styles.appButtonContainer}
+        onPress={()=>navigation.navigate("Search", {type:0})}
+        title="Search by Country"
+        titleStyle={styles.appButtonText}
+      />
 
     </View>
   );
@@ -36,15 +41,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  appButtonContainer: {
-    width: "80%",
-    elevation: 8,
-    backgroundColor: "#009688",
+  appButton: {
+    backgroundColor: "#638BBF",
     borderRadius: 15,
-    paddingVertical: 20,
+    height: 75,
+  },
+  appButtonContainer:{
+    width:"80%",
     marginTop:10,
-    shadowOffset: { height: 1, width: 1 },
-    shadowOpacity: 1,
   },
   appButtonText: {
     fontSize: 18,

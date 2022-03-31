@@ -1,6 +1,7 @@
 import React from 'react';
 import { TextInput, Image, StyleSheet, Text, View, TouchableOpacity, TouchableWithoutFeedback, Keyboard, Alert, ActivityIndicator} from 'react-native';
 import GeoNames from "../api/geonames";
+import { Icon, Button } from 'react-native-elements';
 
 function SearchScreen( {route, navigation} ) {
 
@@ -34,6 +35,7 @@ function SearchScreen( {route, navigation} ) {
       }
       else{Alert.alert("No country found")}
     })
+    .catch(er => Alert.alert(`Oops... Something went wrong. Error: ${er}`))
     .finally(()=>setLoading(false))
   };
 
@@ -51,17 +53,24 @@ function SearchScreen( {route, navigation} ) {
           value={text}
           placeholder= {`Enter a ${type?"city":"country"}`}/>
 
-        {loading?
-        <View style={styles.loading}>
-          <ActivityIndicator color="#009688" size="large"/>
-        </View>
-        :null}
-
-        <TouchableOpacity
-          onPress={()=>type?searchCity():searchCountry()}
-          disabled={text?false:true}>
-          <Image style={text?styles.search:styles.disabledSearch} source={require("../../assets/search.png")}/>
-        </TouchableOpacity>
+        <Button
+              icon={{
+                name: 'magnifying-glass',
+                type: 'entypo',
+                size: 40,
+                color: 'white',
+              }}
+              onPress={()=>type?searchCity():searchCountry()}
+              disabled={!text}
+              loading={loading}
+              loadingProps={{
+                size:"large"
+              }}
+              buttonStyle={styles.search}
+              containerStyle={{
+                paddingTop: 10,
+              }}
+            />
 
       </View>
 
@@ -92,22 +101,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 15,
   },
-  loading: {
-    position: "absolute",
-    top: "10%",
-  },
-  disabledSearch:{
-    tintColor: "#808080",
-    marginTop:20,
-    width: 100,
-    height: 100,
-    resizeMode: 'contain'
-  },
   search:{
-    marginTop:20,
-    width: 100,
-    height: 100,
-    resizeMode: 'contain'
+    backgroundColor: '#638BBF',
+    width:75,
+    height:75,
+    borderRadius: 100,
+    paddingTop:15,
+    paddingBottom:15,
   }
 });
 
