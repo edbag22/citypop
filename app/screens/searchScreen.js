@@ -1,42 +1,8 @@
 import React from 'react';
-import { TextInput, StyleSheet, Text, View, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native';
+import { TextInput, StyleSheet, Text, View, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { Icon, Button } from 'react-native-elements';
-import GeoNames from "../api/geonames";
 
-function SearchScreen( {route, navigation} ) {
-
-  const [text, onChangeText] = React.useState(null);
-  const [loading, setLoading] = React.useState(false);
-
-  const type = route.params.type; // The type of the search. 1 for city, 0 for country.
-
-  const searchCity=()=>{ //Function to search for the given city. Sets Loading to true while searching
-    setLoading(true);
-    GeoNames.searchCity(text)
-    .then(dt => {
-      if(dt.geonames.length){
-      navigation.navigate("Result",dt)
-      }
-      else{Alert.alert("No city found")}
-    })
-    .catch(er => Alert.alert(`Oops... Something went wrong. Error: ${er}`))
-    .finally(()=>setLoading(false))
-  };
-
-  const searchCountry=()=>{ //Function to search for the given country, which will then search for the cities in the country. Sets Loading to true while searching
-    setLoading(true);
-    GeoNames.searchCountry(text)
-    .then(dt => {
-      if(dt.geonames.length){
-      GeoNames.searchCities(dt.geonames[0].countryCode)
-      .then(dt => navigation.navigate("Country",dt))
-      .catch(er => Alert.alert(`Oops... Something went wrong. Error: ${er}`))
-      }
-      else{Alert.alert("No country found")}
-    })
-    .catch(er => Alert.alert(`Oops... Something went wrong. Error: ${er}`))
-    .finally(()=>setLoading(false))
-  };
+function SearchScreen(props) {
 
   return(
 
@@ -44,13 +10,13 @@ function SearchScreen( {route, navigation} ) {
 
       <View style={styles.container}>
 
-        <Text style={styles.heading}>Search by {type?"city":"country"}</Text>
+        <Text style={styles.heading}>Search by {props.type?"city":"country"}</Text>
 
         <TextInput
           style={styles.input}
-          onChangeText={onChangeText}
-          value={text}
-          placeholder= {`Enter a ${type?"city":"country"}`}/>
+          onChangeText={props.onChangeText}
+          value={props.text}
+          placeholder= {`Enter a ${props.type?"city":"country"}`}/>
 
         <Button
               icon={{
@@ -59,9 +25,9 @@ function SearchScreen( {route, navigation} ) {
                 size: 40,
                 color: 'white',
               }}
-              onPress={()=>type?searchCity():searchCountry()}
-              disabled={!text}
-              loading={loading}
+              onPress={()=>props.type?props.searchCity():props.searchCountry()}
+              disabled={!props.text}
+              loading={props.loading}
               loadingProps={{
                 size:"large"
               }}

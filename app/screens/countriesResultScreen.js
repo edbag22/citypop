@@ -1,36 +1,23 @@
 import React from 'react';
 import { StyleSheet, Text, View, Alert } from 'react-native';
 import { Icon, Button } from 'react-native-elements';
-import GeoNames from "../api/geonames";
 
-function CountriesResultScreen( {route, navigation} ) {
-
-  const [loading, setLoading] = React.useState(false);
-  const [currentCity, setCurrentCity] = React.useState(null);
-
-  const searchCity=(city)=>{ //Function to search for the given city. Sets Loading to true while searching
-    setLoading(true);
-    setCurrentCity(city);
-    GeoNames.searchCity(city)
-    .then(dt => navigation.navigate("Result",dt))
-    .catch(er => Alert.alert(`Oops... Something went wrong. Error: ${er}`))
-    .finally(()=>setLoading(false))
-  };
+function CountriesResultScreen(props) {
 
   return(
 
     <View style={styles.container}>
 
-      <Text style={styles.heading}>{route.params.geonames[0].countryName}</Text>
+      <Text style={styles.heading}>{props.country}</Text>
 
-      {route.params.geonames.map(function(city){return(
+      {props.cities.map(function(city){return(
         <Button
-          loading={loading&&currentCity==city.name}
+          loading={props.loading&&props.currentCity==city.name}
           loadingProps={{size:"large"}}
           key={city.geonameId}
           buttonStyle={styles.appButton}
           containerStyle={styles.appButtonContainer}
-          onPress={()=>searchCity(city.name)}
+          onPress={()=>props.searchCity(city.name)}
           title={city.name}
           titleStyle={styles.appButtonText}
         />

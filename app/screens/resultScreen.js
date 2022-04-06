@@ -1,17 +1,17 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-function ResultScreen( {route, navigation} ) {
+function ResultScreen(props) {
 
   return(
 
     <View style={styles.container}>
 
-      <Text style={styles.heading}>{route.params.geonames[0].name}</Text>
+      <Text style={styles.heading}>{props.country.name}</Text>
 
       <View style={styles.border}>
         <Text style={styles.text}>Population:</Text>
-        <Text style={styles.bigText}>{route.params.geonames[0].population}</Text>
+        <Text style={styles.bigText}>{props.country.population}</Text>
       </View>
 
     </View>

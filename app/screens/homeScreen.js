@@ -2,7 +2,7 @@ import React from 'react';
 import { Dimensions, StyleSheet, View, Image} from 'react-native';
 import { Button } from 'react-native-elements';
 
-function HomeScreen( {navigation} ) {
+function HomeScreen(props) {
 
   return(
 
@@ -13,7 +13,7 @@ function HomeScreen( {navigation} ) {
       <Button
         buttonStyle={styles.appButton}
         containerStyle={styles.appButtonContainer}
-        onPress={()=>navigation.navigate("Search", {type:1})}
+        onPress={()=>props.searchByCity()}
         title="Search by City"
         titleStyle={styles.appButtonText}
       />
@@ -21,7 +21,7 @@ function HomeScreen( {navigation} ) {
       <Button
         buttonStyle={styles.appButton}
         containerStyle={styles.appButtonContainer}
-        onPress={()=>navigation.navigate("Search", {type:0})}
+        onPress={()=>props.searchByCountry()}
         title="Search by Country"
         titleStyle={styles.appButtonText}
       />
